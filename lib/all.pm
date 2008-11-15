@@ -1,13 +1,13 @@
 package all;
 
+use 5.006;
 use strict;
 use warnings;
 
-use IO::Dir;
-use File::Spec;
-use File::Find::Rule;
+use File::Spec ();
+use File::Find ();
 
-our $VERSION = '0.5';
+our $VERSION = '0.5001';
 
 sub import {
   my $class = shift;
@@ -34,23 +34,30 @@ sub import {
 }
 
 sub find_modules {
-  my $root = shift;
-  my $rootfile = module_to_file( $root );
+  my $module = shift;
+  my $moduledir = module_to_file( $module );
   my $list = [];
-  foreach my $dir (@INC) {
-    my @files = File::Find::Rule->file()
-                                ->name( '*.pm' )
-			        ->in(
-				     File::Spec->catfile(
-							 $dir,
-							 $rootfile
-							)
-				    );
-    foreach my $file (@files) {
-      my $file = File::Spec->abs2rel( $file, $dir );
+
+  foreach my $incdir (@INC) {
+    next if ref $incdir;
+
+    my $dir = File::Spec->catfile($incdir, $moduledir);
+    next unless -d $dir;
+
+    my @files = ();
+    File::Find::find({
+        wanted => sub {
+            return unless $File::Find::name =~ /\.pm$/;
+            push @files, $File::Find::name;
+        },
+        no_chdir => 1,
+    }, $dir);
+
+    foreach my $absfile (@files) {
+      my $relfile = File::Spec->abs2rel( $absfile, $incdir );
       push @$list, {
-		    path   => $file,
-		    module => file_to_module( $file )
+		    path   => $relfile,
+		    module => file_to_module( $relfile )
 		   };
     }
   }
@@ -81,12 +88,12 @@ all - pragma to load all packages under a namespace
 =head1 SYNOPSIS
 
   # use everything in the IO:: namespace
-  use all of => IO::;
-  use all IO::;
+  use all of => 'IO::';
+  use all 'IO::';
 
   # use everything in the IO:: and Sys:: namespaces
-  use all IO::, Sys::;
-  use all of => IO::, Sys::;
+  use all 'IO::', 'Sys::';
+  use all of => 'IO::', 'Sys::';
 
 =head1 DESCRIPTION
 
@@ -98,7 +105,7 @@ modules.
 
 =over 4
 
-=item
+=item *
 
 This will remove the ability to use exported / optionally exported functions.
 
@@ -111,6 +118,8 @@ James A. Duncan <jduncan@fotango.com>
 =head1 COPYRIGHT
 
 Copyright 2003 Fotango Ltd. All Rights Reserved.
+
+Copyright 2008 Piotr Roszatycki <dexter@cpan.org>.
 
 This module is released under the same terms as Perl itself.
 
