@@ -7,7 +7,7 @@ use warnings;
 use File::Spec ();
 use File::Find ();
 
-our $VERSION = '0.5001';
+our $VERSION = 0.51;
 
 sub import {
   my $class = shift;
@@ -74,6 +74,7 @@ sub file_to_module {
 
 sub module_to_file {
   my $module = shift;
+  $module =~ s/\::\*?$//;
   File::Spec->catfile( split( /\::/, $module ) )
 }
 
@@ -88,12 +89,12 @@ all - pragma to load all packages under a namespace
 =head1 SYNOPSIS
 
   # use everything in the IO:: namespace
-  use all of => 'IO::';
-  use all 'IO::';
+  use all of => 'IO::*';
+  use all 'IO::*';
 
   # use everything in the IO:: and Sys:: namespaces
-  use all 'IO::', 'Sys::';
-  use all of => 'IO::', 'Sys::';
+  use all 'IO::*', 'Sys::*';
+  use all of => qw{IO::* Sys::*};
 
 =head1 DESCRIPTION
 

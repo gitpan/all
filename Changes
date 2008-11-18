@@ -1,5 +1,18 @@
 ------------------------------------------------------------------------
-0.0501 | Piotr Roszatycki <dexter@debian.org> | 2008-11-15
+0.51 | Piotr Roszatycki <dexter@debian.org> | 2008-11-18
+
+New features:
+
+* Module names can contain the asterix '*' char at the end of string.
+
+  use all 'MyApp::Plugins::*';
+
+Fixes:
+
+* t/*.t: Use internal test modules instead IO::* and Socket::*.
+
+------------------------------------------------------------------------
+0.5001 | Piotr Roszatycki <dexter@debian.org> | 2008-11-15
 
 Fixes:
 

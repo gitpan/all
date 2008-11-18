@@ -3,12 +3,12 @@ NAME
 
 SYNOPSIS
       # use everything in the IO:: namespace
-      use all of => 'IO::';
-      use all 'IO::';
+      use all of => 'IO::*';
+      use all 'IO::*';
 
       # use everything in the IO:: and Sys:: namespaces
-      use all 'IO::', 'Sys::';
-      use all of => 'IO::', 'Sys::';
+      use all 'IO::*', 'Sys::*';
+      use all of => qw{IO::* Sys::*};
 
 DESCRIPTION
     With the all pragma you can load multiple modules that share the same
