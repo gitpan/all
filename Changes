@@ -1,4 +1,14 @@
 ------------------------------------------------------------------------
+0.5101 | Piotr Roszatycki <dexter@debian.org> | 2008-12-05
+
+Changes:
+
+* Used "/" as separator even on non-Unix platform because we need to be
+  compatible with %INC variable.
+  
+* t/pod*.t: Test POD coverage.
+
+------------------------------------------------------------------------
 0.51 | Piotr Roszatycki <dexter@debian.org> | 2008-11-18
 
 New features:

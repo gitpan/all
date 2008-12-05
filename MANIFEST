@@ -9,6 +9,8 @@ t/00single.t
 t/01single_of.t
 t/02multiple.t
 t/03multiple_of.t
+t/pod.t
+t/pod_coverage.t
 t/tlib/all/Test1.pm
 t/tlib/all/Test1/Test1.pm
 t/tlib/all/Test1/Test2.pm

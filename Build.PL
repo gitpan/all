@@ -12,7 +12,7 @@ my $build = new Module::Build(
     },
     create_makefile_pl => 'traditional',
     add_to_cleanup     => [
-        'META.yml',    '*.bak',    '*.gz',       '*.tgz',  '*.ppd',
+        'META.yml', '*.bak', '*.gz', '*.tgz', '*.ppd', '*.deb', '*.bat',
         'Makefile.PL', 'Makefile', 'pm_to_blib', 'cover_db',
         'all-*',
     ],

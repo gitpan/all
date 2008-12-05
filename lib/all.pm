@@ -7,7 +7,7 @@ use warnings;
 use File::Spec ();
 use File::Find ();
 
-our $VERSION = 0.51;
+our $VERSION = 0.51_01;
 
 sub import {
   my $class = shift;
@@ -18,7 +18,7 @@ sub import {
   }
   my $caller  = caller();
   foreach my $arg (@$args) {
-    my $modules = find_modules( $arg );
+    my $modules = _find_modules( $arg );
     foreach my $module (@$modules) {
       my $package = $module->{ module };
       eval {
@@ -33,9 +33,9 @@ sub import {
   1;
 }
 
-sub find_modules {
+sub _find_modules {
   my $module = shift;
-  my $moduledir = module_to_file( $module );
+  my $moduledir = _module_to_file( $module );
   my $list = [];
 
   foreach my $incdir (@INC) {
@@ -57,25 +57,26 @@ sub find_modules {
       my $relfile = File::Spec->abs2rel( $absfile, $incdir );
       push @$list, {
 		    path   => $relfile,
-		    module => file_to_module( $relfile )
+		    module => _file_to_module( $relfile )
 		   };
     }
   }
   return $list;
 }
 
-sub file_to_module {
+sub _file_to_module {
   my $file = shift;
   $file    =~ s/\.pm$//;
   my @list = File::Spec->splitpath( $file );
   shift @list;
-  join('::',  @list)
+  return join('::',  @list)
 }
 
-sub module_to_file {
+sub _module_to_file {
   my $module = shift;
-  $module =~ s/\::\*?$//;
-  File::Spec->catfile( split( /\::/, $module ) )
+  $module =~ s{::\*?$}{};
+  $module =~ s{::}{/}g;
+  return $module;
 }
 
 1;
@@ -84,7 +85,7 @@ __END__
 
 =head1 NAME
 
-all - pragma to load all packages under a namespace
+all - Load all packages under a namespace
 
 =head1 SYNOPSIS
 
@@ -116,7 +117,9 @@ This will remove the ability to use exported / optionally exported functions.
 
 James A. Duncan <jduncan@fotango.com>
 
-=head1 COPYRIGHT
+Piotr Roszatycki <dexter@cpan.org>
+
+=head1 LICENSE
 
 Copyright 2003 Fotango Ltd. All Rights Reserved.
 

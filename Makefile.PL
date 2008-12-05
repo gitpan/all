@@ -3,14 +3,14 @@ require 5.006;
 use ExtUtils::MakeMaker;
 WriteMakefile
 (
-          'PL_FILES' => {},
-          'INSTALLDIRS' => 'site',
           'NAME' => 'all',
-          'EXE_FILES' => [],
           'VERSION_FROM' => 'lib/all.pm',
           'PREREQ_PM' => {
                            'File::Find' => 0,
                            'File::Spec' => 0
-                         }
+                         },
+          'INSTALLDIRS' => 'site',
+          'EXE_FILES' => [],
+          'PL_FILES' => {}
         )
 ;
